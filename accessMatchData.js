@@ -1,10 +1,18 @@
 (async () => {
     try {
-        // Automatically extract the token using your method
+        // 1. Get the current browser URL
+        const currentUrl = window.location.href;
+        
+        // 2. Transform the URL to point to the API (e.g., worldaces.site -> api.worldaces.site)
+        const apiUrl = currentUrl.replace("://", "://api.");
+        
+        console.log(`Fetching from dynamically generated API URL: ${apiUrl}`);
+
+        // 3. Extract the token from localStorage
         const token = JSON.parse(localStorage["vb_sim_auth"])['tokens']['accessToken'];
         
-        // Fetch the match simulation data
-        const response = await fetch("https://api.worldaces.site/match/ae1ad917-a541-4b46-b2c8-2252bd1ac401", {
+        // 4. Fetch the match simulation data
+        const response = await fetch(apiUrl, {
             method: "GET",
             headers: {
                 "Authorization": `Bearer ${token}`,
@@ -17,9 +25,9 @@
         const data = await response.json();
         console.log("Match Data:", data);
         
-        // Bonus: Automatically copy it to your clipboard
+        // 5. Automatically copy the resulting JSON to your clipboard
         copy(data); 
-        console.log("JSON copied to clipboard!");
+        console.log("JSON successfully copied to clipboard!");
     } catch (error) {
         console.error("Error fetching match data:", error);
     }
